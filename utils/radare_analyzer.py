@@ -42,3 +42,12 @@ class BinaryAnalyzer():
                 if call.get("type", None) == "CALL":
                     offsets.add(call.get("addr", None))
         return list(filter(None, offsets))
+
+    def get_function_names(self, offsets):
+        off2name = {}
+        for off in offsets:
+            name = self.r2.cmd(f"afi. {off}").strip()
+            if name == "":
+                name = hex(off)
+            off2name[off] = name
+        return off2name
