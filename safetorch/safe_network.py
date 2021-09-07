@@ -47,7 +47,8 @@ class SAFE(nn.Module):
             self.conf.dense_layer_size, self.conf.embedding_size, bias=True
         )
 
-    def forward(self, instructions, lengths):
+    def forward(self, instructions, lengths, device = "cpu"):
+        lengths = lengths.tolist()
 
         # for now assume a batch size of 1
         batch_size = 1
@@ -69,7 +70,7 @@ class SAFE(nn.Module):
 
         pad = torch.zeros(
             1, self.conf.max_instructions - lengths[0], self.conf.embedding_size
-        )
+        ).to(device)
 
         # We create the matrix H
         H = torch.cat((output, pad), 1)
